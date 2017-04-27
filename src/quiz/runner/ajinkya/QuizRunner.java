@@ -1,4 +1,4 @@
-package quiz.runner.ainchwar;
+package quiz.runner.ajinkya;
 
 import java.util.List;
 
