@@ -1,4 +1,4 @@
-package quiz;
+package quiz.model;
 
 public class Match {
 	private String opponent;

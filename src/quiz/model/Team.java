@@ -1,4 +1,4 @@
-package quiz;
+package quiz.model;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
