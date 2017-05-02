@@ -30,7 +30,7 @@ public class QuizRunner {
 		System.out.println("---------------3.	Print the team names in reverse sorted order.-------------------");
 		teams.stream().map(Team::getName).sorted(Comparator.reverseOrder()).forEach(System.out::println);
  
-  
+    
 		System.out
 				.println("---------------4.	Print the home ground names in alphabetical order-------------------");
 		teams.stream().map(Team::getHomeGround).sorted((t1,t2)->t1.toString().compareTo(t2.toString())).forEach(System.out::println);
