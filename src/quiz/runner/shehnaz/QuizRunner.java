@@ -16,7 +16,7 @@ public class QuizRunner {
 		List<Team> teams = QuizDataProvider.getTeams();
 		System.out.println(teams);
 		
-		System.out.println("1.Print all the team name and home ground. Sample output – \"Rising Super Giants : GAHUNJE\".");
+		System.out.println("1. Print all the team name and home ground. Sample output – \"Rising Super Giants : GAHUNJE\".");
 		teams
 		.forEach(team -> System.out.println(team.getName() +" : "+ team.getHomeGround()));
 		
