@@ -34,9 +34,6 @@ public class QuizRunner {
 		System.out
 				.println("---------------4.	Print the home ground names in alphabetical order-------------------");
 		teams.stream().map(Team::getHomeGround).sorted((t1,t2)->t1.toString().compareTo(t2.toString())).forEach(System.out::println);
-
-
-
 	}
 
 }
