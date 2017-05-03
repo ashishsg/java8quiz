@@ -1,8 +1,12 @@
 package quiz.runner.shehnaz;
 
-import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
+import quiz.model.Ground;
+import quiz.model.Match;
 import quiz.model.QuizDataProvider;
 import quiz.model.Team;
 public class QuizRunner {
@@ -16,27 +20,39 @@ public class QuizRunner {
 		List<Team> teams = QuizDataProvider.getTeams();
 		System.out.println(teams);
 		
-		System.out.println("1.Print  all the team name and home ground. Sample output – \"Rising Super Giants : GAHUNJE\".");
+		System.out.println("1.Create a map of Team name -> Home Ground and print the contents.");
 		teams
-		.forEach(team -> System.out.println(team.getName() +" : "+ team.getHomeGround()));
+		.stream().collect(Collectors.toMap(Team :: getName, Team :: getHomeGround))
+		.forEach((key, value) -> System.out.println(key + " -> " + value));
 		
-		System.out.println("2.Print the team names in natural sorted order.");
+		System.out.println("\n\n2.Count number of matches Pune team played at a ground. Print the output in format “Ground name : Count”. (hint: use team.getMatches())");
 		teams
 		.stream()
-		.sorted(Comparator.comparing(Team::getName))
-		.forEach(team -> System.out.println(team.getName()));
-	
-		System.out.println("3.Print the team names in reverse sorted order.");
-		teams
+		.filter(team -> team.getName().equals(QuizDataProvider.TEAM1))
+		.flatMap(team -> team.getMatches().stream())
+		.collect(Collectors.groupingBy(Match :: getVenue, Collectors.counting()))
+		.forEach((key, value) -> System.out.println(key + " -> " + value));
+		
+		System.out.println("\n\n3.Calculate total runs scored by Pune team.");
+		System.out.println(teams
 		.stream()
-		.sorted(Comparator.comparing(Team::getName).reversed())
-		.forEach(team -> System.out.println(team.getName()));
-	
-		System.out.println("4.Print the home ground names in alphabetical order.");
-		teams
-		  .stream()
-		  .sorted((team1, team2) -> team1.getHomeGround().name().compareTo(team2.getHomeGround().name()))
-		  .forEach(team -> System.out.println(team.getHomeGround()));
+		.filter(team -> team.getName().equals(QuizDataProvider.TEAM1))
+		.flatMap(team -> team.getMatches().stream())
+		.mapToInt(Match :: getRunsScored)
+		.sum());
+		
+		System.out.println("\n\n4.Did Pune team play a match at WANKHEDE?");
+		System.out.println(teams.stream()
+		.filter(team -> team.getName().equals(QuizDataProvider.TEAM1))
+		.flatMap(team -> team.getMatches().stream())
+		.anyMatch(teamMatch -> teamMatch.getVenue().equals(Ground.WANKHEDE)) ? "Yes" : "No");
+		
+		System.out.println("\n\n5.How many matches did Pune team win?");
+		System.out.println(teams.stream()
+		.filter(team -> team.getName().equals(QuizDataProvider.TEAM1))
+		.flatMap(team -> team.getMatches().stream())
+		.filter(teamMatch -> (teamMatch.getRunsScored() - teamMatch.getRunsConceded() > 0))
+		.count());
 	}
 
 }
