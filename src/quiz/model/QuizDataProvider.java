@@ -5,8 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class QuizDataProvider {
-	public static final String TEAM1 = "Rising Super Gients";
-	public static final String TEAM2 = "Royal Challengers Benglore";
+	public static final String TEAM1 = "Rising Super Giants";
+	public static final String TEAM2 = "Royal Challengers Bangalore";
 	public static final String TEAM3 = "Mumbai Indians";
 	public static final String TEAM4 = "Kolkata Night Riders";
 	private static final List<Team> teams;
