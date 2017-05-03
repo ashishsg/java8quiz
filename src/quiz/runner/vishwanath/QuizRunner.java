@@ -12,8 +12,16 @@ public class QuizRunner {
 
 	public static void main(String[] args) {
 
+	List<Team> teams = QuizDataProvider.getTeams();
 		List<Team> teams = QuizDataProvider.getTeams();
-		System.out.println(teams);
+		
+		teams.stream().map(team -> team.getName()+ " : " + team.getHomeGround()).forEach(System.out::println);
+		System.out.println("________________________________________________");
+		teams.stream().map(t -> t.getName()).sorted().forEach(System.out::println);
+		System.out.println("________________________________________________");
+		teams.stream().map(team -> team.getName()).sorted(Comparator.reverseOrder()).forEach(System.out::println);
+		System.out.println("________________________________________________");
+		teams.stream().map(t -> t.getHomeGround()).sorted().forEach(System.out::println);
 	}
 
 }
