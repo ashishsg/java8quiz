@@ -20,6 +20,7 @@ public class QuizRunner {
 	
 	private static void quiz_one(List<Team> teams){
 		
+
 		//1.Print all the team name and home ground. Sample output – "Rising Super Giants : GAHUNJE".
 		System.out.println("1)=============  Print all the team name and home ground =========================");
 		teams.stream()
