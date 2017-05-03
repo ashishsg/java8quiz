@@ -14,6 +14,7 @@ public class QuizRunner {
 
 		List<Team> teams = QuizDataProvider.getTeams();
 		System.out.println(teams);
+		Quiz1.main(args);
 	}
 
 }
