@@ -20,7 +20,7 @@ public class QuizRunner {
 		List<Team> teams = QuizDataProvider.getTeams();
 		System.out.println(teams);
 		
-		System.out.println("1.Create a map of Team name -> Home Ground and print the contents.");
+		System.out.println("1. Create a map of Team name -> Home Ground and print the contents.");
 		teams
 		.stream().collect(Collectors.toMap(Team :: getName, Team :: getHomeGround))
 		.forEach((key, value) -> System.out.println(key + " -> " + value));
