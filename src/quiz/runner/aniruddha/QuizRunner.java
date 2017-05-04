@@ -68,7 +68,7 @@ public class QuizRunner {
 
 		System.out.println(teams.stream().filter(t -> QuizDataProvider.TEAM1.equals(t.getName())).findFirst()
 				.get().getMatches().stream().anyMatch(m));
-
+ 
 		System.out.println("\n---------------	5.How many matches did Pune team win?");
  
 		System.out.println(teams.stream().filter(t -> QuizDataProvider.TEAM1.equals(t.getName())).findFirst()
