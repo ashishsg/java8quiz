@@ -38,8 +38,8 @@ public class Quiz2Solution {
 			System.out.println(puneTeam.get().getMatches().stream().mapToInt(Match::getRunsScored).sum());
 			//or
 			System.out
-					.println("" + puneTeam.get().getMatches().stream()
-							.collect(Collectors.summingInt(Match::getRunsScored)));
+					.println(puneTeam.get().getMatches().stream()
+							.collect(Collectors.summingInt(Match::getRunsScored)).intValue());
 
 			// Quiz 4: Find if pune team played at least 1 match at WANKHEDE
 			boolean playedAtWankhede = puneTeam.get().getMatches().stream()
