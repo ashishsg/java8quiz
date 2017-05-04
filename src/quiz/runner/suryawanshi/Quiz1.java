@@ -21,8 +21,7 @@ public class Quiz1 {
 
 	public static void printTeamAndGround(List<Team> teams) {
 		System.out.println("-------------- Solution 1 ---------------------------");
-		System.out.println(
-				teams.stream().map(team -> (team.getName() + ":" + team.getHomeGround())).collect(Collectors.toList()));
+		teams.stream().map(team -> (team.getName() + ":" + team.getHomeGround())).forEach(System.out::print);
 		System.out.println("-------------- Solution 1 another approch ---------------------------");
 		System.out.println(teams.stream().map(team -> team.getName() + ":" + team.getHomeGround())
 				.collect(Collectors.joining(",")));
@@ -30,22 +29,20 @@ public class Quiz1 {
 
 	public static void printTeamSorting(List<Team> teams) {
 		System.out.println("-------------- Solution 2 ---------------------------");
-		System.out.println(teams.stream().map(Team::getName).sorted().reduce("", String::concat));
+		teams.stream().map(Team::getName).sorted().forEach(System.out::println);
 	}
 
 	public static void printTeamReverSorting(List<Team> teams) {
 		System.out.println("-------------- Solution 3 ---------------------------");
-		System.out.println(teams.stream().map(Team::getName).sorted(java.util.Collections.reverseOrder()).reduce("",
-				String::concat));
+		teams.stream().map(Team::getName).sorted(java.util.Collections.reverseOrder()).forEach(System.out::println);
 	}
 
 	public static void printTeamHomeGroundSorting(List<Team> teams) {
 		System.out.println("-------------- Solution 4 ---------------------------");
-		System.out.println(
-				teams.stream().map(team -> team.getHomeGround().name()).sorted().collect(Collectors.joining(",")));
+		teams.stream().map(team -> team.getHomeGround().name()).sorted().forEach(System.out::println);
 		System.out.println("-------------- Solution 4 Reverse Order  ---------------------------");
-		System.out.println(teams.stream().map(team -> team.getHomeGround().name())
-				.sorted(java.util.Collections.reverseOrder()).collect(Collectors.joining(",")));
+		teams.stream().map(team -> team.getHomeGround().name())
+				.sorted(java.util.Collections.reverseOrder()).forEach(System.out::println);
 	}
 
 }
