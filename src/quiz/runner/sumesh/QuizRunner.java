@@ -1,10 +1,16 @@
 package quiz.runner.sumesh;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import quiz.model.Ground;
 import quiz.model.Match;
@@ -13,14 +19,36 @@ import quiz.model.Team;
 public class QuizRunner {
 
 	private QuizRunner() {
-
+		
 	}
 
 	public static void main(String[] args) {
 
 		List<Team> teams = QuizDataProvider.getTeams();
 		//quiz1(teams);
+		//quiz2(teams);
+
+		System.out.println("Print the details of matches played on 4th April 2017.");
+		teams.stream().flatMap(team -> team.getMatches().stream()).filter(match -> match.getMatchDate().equals(LocalDate.of(2017, 04, 04))).forEach(System.out::println);
 		
+		System.out.println("\nFind out the duration(number of days) of this tournament.");
+		LocalDate firsMatchDate = teams.stream().flatMap(team -> team.getMatches().stream()).map(Match::getMatchDate).min(LocalDate::compareTo).get();
+		LocalDate lastMatchDate = teams.stream().flatMap(team -> team.getMatches().stream()).map(Match::getMatchDate).max(LocalDate::compareTo).get();
+		Period period = Period.between(firsMatchDate, lastMatchDate);
+		System.out.println("Number of days : " + period.getDays());
+		
+		System.out.println("\nProvide(print) details of all the matches to each team.");
+		teams.stream().flatMap(team -> team.getMatches().stream()).forEach(System.out::println);
+		
+		System.out.println("\nFind out the maximum number of balls team 2 can take to score 110 runs to have NRR better than team 1.");
+		BigDecimal runCondede = new BigDecimal(390).divide(new BigDecimal(360), 3, RoundingMode.CEILING);
+		BigDecimal runScored = new BigDecimal(360);
+		BigDecimal compareNrr = BigDecimal.valueOf(0.109);
+		OptionalInt optInt = IntStream.range(240,360).filter(noOfBallsCounter -> runScored.divide(BigDecimal.valueOf(noOfBallsCounter),3,RoundingMode.CEILING).subtract(runCondede).compareTo(compareNrr) == 1).max();
+		System.out.println(optInt.getAsInt() - 240);
+	}
+
+	private static void quiz2(List<Team> teams) {
 		//Below both line can be put into one.
 		//Create map
 		Map<String, Ground> teamNameGrndMap = teams.stream().collect(Collectors.toMap(Team::getName, Team::getHomeGround));
