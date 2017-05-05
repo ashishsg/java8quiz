@@ -44,7 +44,7 @@ public class QuizRunner {
 		BigDecimal runCondede = new BigDecimal(390).divide(new BigDecimal(360), 3, RoundingMode.CEILING);
 		BigDecimal runScored = new BigDecimal(360);
 		BigDecimal compareNrr = BigDecimal.valueOf(0.109);
-		OptionalInt optInt = IntStream.range(240,360).filter(noOfBallsCounter -> runScored.divide(BigDecimal.valueOf(noOfBallsCounter),3,RoundingMode.CEILING).subtract(runCondede).compareTo(compareNrr) == 1).max();
+		OptionalInt optInt = IntStream.range(240,360).map(i -> 360 - i + 240 - 1).filter(noOfBallsCounter -> runScored.divide(BigDecimal.valueOf(noOfBallsCounter),3,RoundingMode.CEILING).subtract(runCondede).compareTo(compareNrr) == 1).limit(1).findFirst();
 		System.out.println(optInt.getAsInt() - 240);
 	}
 
