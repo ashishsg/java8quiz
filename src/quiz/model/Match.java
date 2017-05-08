@@ -11,9 +11,10 @@ public class Match {
 	private int matchNumber;
 	private LocalDate matchDate;
 	private String team1Name;
+	private boolean day;
 
 	public Match(String opponent, int runsScored, int ballsTaken, int runsConceded, int ballsbowled, Ground venue,
-			int matchNumber, LocalDate matchDate, String team1Name) {
+			int matchNumber, LocalDate matchDate, String team1Name, boolean day) {
 		super();
 		this.opponent = opponent;
 		this.runsScored = runsScored;
@@ -24,6 +25,7 @@ public class Match {
 		this.matchNumber = matchNumber;
 		this.matchDate = matchDate;
 		this.team1Name = team1Name;
+		this.day = day;
 	}
 	
 	public String getOpponent() {
@@ -58,11 +60,21 @@ public class Match {
 		return team1Name;
 	}
 
+	public int getTotalRunsScored() {
+		return runsConceded + runsScored;
+	}
+
+	public boolean isDay() {
+		return day;
+	}
+
+
 	@Override
 	public String toString() {
 		return "Match [opponent=" + opponent + ", runsScored=" + runsScored + ", ballsTaken=" + ballsTaken
 				+ ", runsConceded=" + runsConceded + ", ballsbowled=" + ballsbowled + ", venue=" + venue
-				+ ", matchNumber=" + matchNumber + ", matchDate=" + matchDate + ", team1Name=" + team1Name + "]";
+				+ ", matchNumber=" + matchNumber + ", matchDate=" + matchDate + ", team1Name=" + team1Name + ", day="
+				+ day + "]";
 	}
 
 	@Override
