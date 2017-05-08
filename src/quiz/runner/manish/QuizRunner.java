@@ -1,16 +1,22 @@
 package quiz.runner.manish;
 
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import quiz.model.Ground;
 import quiz.model.Match;
 import quiz.model.QuizDataProvider;
 import quiz.model.Team;
+
+
 public class QuizRunner {
 
 	private QuizRunner() {
@@ -56,6 +62,25 @@ public class QuizRunner {
 		
 		System.out.println("\n5. Pune won : "+teams.stream().filter(t -> t.getName().equals(QuizDataProvider.TEAM1))
 		.flatMap(t -> t.getMatches().stream()).filter(m -> m.getRunsScored() > m.getRunsConceded()).count());
+		
+		System.out.println("\n Match played on 4th April : ");
+		teams.stream().flatMap(t -> t.getMatches().stream()).filter(m -> m.getMatchDate().equals(LocalDate.of(2017, 4, 4))).forEach(System.out::println);
+		
+		System.out.println("\n Total Duration of Tournament : "+teams.stream().flatMap(t -> t.getMatches().stream()).map(Match::getMatchDate).distinct().count());
+		
+		System.out.println("\n Details of all the matches : ");
+//		teams.stream().flatMap(t -> t.getMatches().stream()).forEach(System.out::println);
+//		teams.stream().collect(Collectors.toMap(Team::getName, Team::getMatches)).forEach((k,v) -> System.out.println(" Team :"+k+ " Match : "+ v.forEach(System.out.print(v))));
+//		team.stream().forEach(t-> System.out.println(" Team : "+t.getName()));
+//		teams.stream().map(Team::getMatches).collect(Collectors.toList()).forEach(System.out::println);
+		teams.stream().collect(Collectors.toMap(Team::getName, Team::getMatches)).forEach((k,v) -> System.out.println(" Team : "+ k +"\n Match : "+ v));
+		BigDecimal runsConceded = new BigDecimal(390.0).setScale(3, RoundingMode.CEILING);
+		BigDecimal ballsBowled = new BigDecimal(360.0).setScale(3, RoundingMode.CEILING);
+		BigDecimal runScored = new BigDecimal(360.0).setScale(3, RoundingMode.CEILING);
+//		BigDecimal ballsFaced = new BigDecimal(280.0).setScale(3, RoundingMode.CEILING);
+//		System.out.println(runScored.divide(ballsFaced, 3, RoundingMode.CEILING));
+//		System.out.println(runsConceded.divide(ballsBowled, 3, RoundingMode.CEILING));
+		System.out.println("\n Maximum number of balls team 2 can take to score 110 runs to have NRR better than team 1 :"+IntStream.range(1, 120).filter(ballsFaced -> BigDecimal.valueOf(0.109).compareTo(runScored.divide(new BigDecimal(240 + ballsFaced).setScale(3, RoundingMode.CEILING), 3, RoundingMode.CEILING).subtract(runsConceded.divide(ballsBowled, 3, RoundingMode.CEILING))) < 0).max().getAsInt());
 		
 	}
 }
