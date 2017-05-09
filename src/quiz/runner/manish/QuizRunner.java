@@ -82,5 +82,17 @@ public class QuizRunner {
 //		System.out.println(runsConceded.divide(ballsBowled, 3, RoundingMode.CEILING));
 		System.out.println("\n Maximum number of balls team 2 can take to score 110 runs to have NRR better than team 1 :"+IntStream.range(1, 120).filter(ballsFaced -> BigDecimal.valueOf(0.109).compareTo(runScored.divide(new BigDecimal(240 + ballsFaced).setScale(3, RoundingMode.CEILING), 3, RoundingMode.CEILING).subtract(runsConceded.divide(ballsBowled, 3, RoundingMode.CEILING))) < 0).max().getAsInt());
 		
+		
+		System.out.println("Quiz 4 : ");
+		System.out.println(" Date and Matches : ");
+		teams.stream().flatMap(t -> t.getMatches().stream()).distinct().collect(Collectors.groupingBy(Match::getVenue,Collectors.mapping(Match::getMatchDate, Collectors.toList()))).forEach((k,v) -> System.out.println(k + " = "+ v));
+	
+		System.out.println("\n Maximum number of runs were scored at each venue");
+		teams.stream().flatMap(t -> t.getMatches().stream()).collect(Collectors.groupingBy(Match::getVenue,Collectors.summarizingInt(Match::getRunsScored))).forEach((k,v) -> System.out.println(" Venue :"+ k + " Max Run Scored :"+v.getMax()));
+	
+		System.out.println("\n Total runs scored at a venue : ");
+		teams.stream().flatMap(t -> t.getMatches().stream()).collect(Collectors.groupingBy(Match::getVenue,Collectors.summingInt(Match::getRunsScored))).forEach((k,v) -> System.out.println(" Venue :"+ k + " Runs Scored :"+v));
+	
+		teams.stream().flatMap(t -> t.getMatches().stream()).distinct().collect(Collectors.toMap(Match::getMatchNumber, Match::isDay)).forEach((k,v) -> System.out.println("\n Match Number :"+k+ " Day Match :"+v.booleanValue()));
 	}
 }
