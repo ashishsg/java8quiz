@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -27,7 +28,26 @@ public class QuizRunner {
 		List<Team> teams = QuizDataProvider.getTeams();
 		//quiz1(teams);
 		//quiz2(teams);
+		//quiz3(teams);
+		
+		System.out.println("Find out the dates when match(s) were played at each venue.");
+		Map<Ground, List<LocalDate>> dateToVenueMap = teams.stream().flatMap( team -> team.getMatches().stream()).collect(Collectors.groupingBy(Match::getVenue, Collectors.mapping(Match::getMatchDate, Collectors.toList())));
+		dateToVenueMap.forEach((grnd, date) -> System.out.println(grnd + " = " + date));
+		
+		System.out.println("\nFind the match in which maximum number of runs were scored at each venue.");
+		Map<Ground, Optional<Match>> venueToMatchMap = teams.stream().flatMap( team -> team.getMatches().stream()).collect(Collectors.groupingBy(Match::getVenue, Collectors.maxBy(Comparator.comparingInt(Match::getTotalRunsScored))));
+		venueToMatchMap.forEach((grnd, match) -> System.out.println(grnd + " = " + match.get()));
+		
+		System.out.println("\nFind total runs scored at a venue.");
+		Map<Ground, Integer > venueToRunsScoredMap = teams.stream().flatMap( team -> team.getMatches().stream()).collect(Collectors.groupingBy(Match::getVenue, Collectors.summingInt(Match::getTotalRunsScored)));
+		venueToRunsScoredMap.forEach((grnd, runsScored) -> System.out.println(grnd + " = " + runsScored));
+		
+		System.out.println("\nSeparate out the match numbers as day match or night match.");
+		Map<Boolean, List<Integer>> dayOrNightToMatchNumbers = teams.stream().flatMap( team -> team.getMatches().stream()).collect(Collectors.partitioningBy(Match::isDay, Collectors.mapping(Match::getMatchNumber, Collectors.toList())));
+		dayOrNightToMatchNumbers.forEach((isDay, matchNumber) -> System.out.println(isDay + " = " + matchNumber));
+	}
 
+	private static void quiz3(List<Team> teams) {
 		System.out.println("Print the details of matches played on 4th April 2017.");
 		teams.stream().flatMap(team -> team.getMatches().stream()).filter(match -> match.getMatchDate().equals(LocalDate.of(2017, 04, 04))).forEach(System.out::println);
 		
@@ -35,7 +55,7 @@ public class QuizRunner {
 		LocalDate firsMatchDate = teams.stream().flatMap(team -> team.getMatches().stream()).map(Match::getMatchDate).min(LocalDate::compareTo).get();
 		LocalDate lastMatchDate = teams.stream().flatMap(team -> team.getMatches().stream()).map(Match::getMatchDate).max(LocalDate::compareTo).get();
 		Period period = Period.between(firsMatchDate, lastMatchDate);
-		System.out.println("Number of days : " + period.getDays());
+		System.out.println("Number of days : " + period.getDays() + 1);
 		
 		System.out.println("\nProvide(print) details of all the matches to each team.");
 		teams.stream().flatMap(team -> team.getMatches().stream()).forEach(System.out::println);
