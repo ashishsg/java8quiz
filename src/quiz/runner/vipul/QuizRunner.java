@@ -1,9 +1,19 @@
 package quiz.runner.vipul;
 
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 
 import quiz.model.Ground;
 import quiz.model.Match;
@@ -21,8 +31,10 @@ public class QuizRunner {
 		List<Team> teams = QuizDataProvider.getTeams();
 		System.out.println(teams);
 
-		java8Quiz1(teams);
-		java8Quiz2(teams);
+		// java8Quiz1(teams);
+		// java8Quiz2(teams);
+		// jav8Quiz3(teams);
+		jav8Quiz4(teams);
 	}
 
 	private static void java8Quiz1(List<Team> teams) {
@@ -80,4 +92,58 @@ public class QuizRunner {
 		}
 	}
 
+	private static void jav8Quiz3(List<Team> teams) {
+		System.out.println(
+				"*********************************************  Quiz 3 ********************************************* \n\n");
+		LocalDate localDate = LocalDate.of(2017, Month.APRIL, 4);
+		System.out.println("Specific Date=" + localDate);
+		Map<String, List<Match>> teamsMatchMap = teams.stream()
+				.collect(Collectors.toMap(Team::getName, Team::getMatches));
+		teamsMatchMap.forEach((team, matches) -> {
+			List<Match> matchList = matches.stream().filter(match -> localDate.equals(match.getMatchDate()))
+					.collect(Collectors.toList());
+			if (matchList.size() != 0) {
+				matchList.forEach(match -> System.out.println("Opponenet " + match));
+			}
+		});
+	}
+
+	private static void jav8Quiz4(List<Team> teams) {
+		System.out.println(
+				"*********************************************  Quiz 4 ********************************************* \n\n");
+
+		System.out.println(
+				"\n\n 1. Find out the dates when match(s) were played at each venue. Sample output : EDENGARDENS=[2017-04-04]");
+
+		Map<String, List<Match>> teamsMatchMap = teams.stream()
+				.collect(Collectors.toMap(Team::getName, Team::getMatches));
+		Set<String> matcheSet = new HashSet<>();
+		teamsMatchMap.forEach((team, matches) -> {
+			matches.forEach(match -> matcheSet.add(match.getVenue() + " = [" + match.getMatchDate() + "]"));
+		});
+
+		matcheSet.forEach(s -> System.out.println(s));
+
+		System.out.println("\n\n 2. Find the match in which maximum number of runs were scored at each venue");
+		Set<String> matcheRunScoreSet = new HashSet<>();
+		teamsMatchMap.forEach((team, matches) -> {
+			matches.forEach(match -> matcheRunScoreSet
+					.add((match.getVenue() + " = [" + ((match.getRunsScored() > match.getRunsConceded()
+							? match.getRunsScored() : match.getRunsConceded())) + "]")));
+		});
+
+		matcheRunScoreSet.forEach(s -> System.out.println(s));
+
+		System.out.println("\n\n 3. Find total runs scored at a venue");
+		Stream<Match> matches = teams.stream().flatMap(team -> team.getMatches().stream());
+
+		Map<Ground, Integer> sum = matches
+				.collect(Collectors.groupingBy(Match::getVenue, Collectors.summingInt(Match::getRunsScored)));
+		sum.forEach((t, g) -> System.out.println("Venue : " + t + " , Total Run scored : " + g));
+
+		System.out.println(
+				"\n\n 4.	Separate out the match numbers as day match or night match. (Hint: final result structure Map<Boolean, List<Integer>> dayOrNightToMatchNumbers)");
+		Map<Boolean, Set<Integer>> dayNightMatch = teams.stream().flatMap(team -> team.getMatches().stream()).collect(Collectors.partitioningBy(Match::isDay, Collectors.mapping(Match::getMatchNumber, Collectors.toSet())));
+		dayNightMatch.forEach((isDay, matchNumber) -> System.out.println(isDay + " = " + matchNumber));
+	}
 }
