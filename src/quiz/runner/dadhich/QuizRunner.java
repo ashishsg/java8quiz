@@ -1,5 +1,6 @@
 package quiz.runner.dadhich;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -20,8 +21,10 @@ public class QuizRunner {
 
 	public static void main(String[] args) {
 
-		quiz1();
-		quiz2();
+		//quiz1();
+		//quiz2();
+		//quiz3();
+		quiz4();
 	}
 
 	/**
@@ -94,6 +97,47 @@ public class QuizRunner {
 		System.out.println("-----5-----------");
 		System.out.print(puneTeam.get().getMatches().stream()
 				.filter(match -> match.getRunsScored() > match.getRunsConceded()).count());
+
+	}
+	
+	private static void quiz3(){
+		
+		
+	}
+	
+	private static void quiz4() {
+		List<Team> teams = QuizDataProvider.getTeams();
+		System.out.println("-----1-----------");
+
+		teams.stream().flatMap(team -> team.getMatches().stream()).distinct().collect(
+				Collectors.groupingBy(Match::getVenue, Collectors.mapping(Match::getMatchDate, Collectors.toList())))
+				.forEach((key, value) -> {
+					System.out.println(key + "=" + value);
+				});
+
+		System.out.println("-----2-----------");
+
+		teams.stream().flatMap(team -> team.getMatches().stream()).distinct()
+				.collect(Collectors.toMap(Match::getVenue, Match::getRunsScored, Integer::max))
+				.forEach((key, value) -> {
+					System.out.println(key + "=" + value);
+				});
+
+		System.out.println("-----3-----------");
+
+		teams.stream().flatMap(team -> team.getMatches().stream()).distinct()
+				.collect(Collectors.toMap(Match::getVenue, Match::getTotalRunsScored, Integer::sum))
+				.forEach((key, value) -> {
+					System.out.println(key + "=" + value);
+				});
+
+		System.out.println("-----4-----------");
+
+		teams.stream().flatMap(team -> team.getMatches().stream()).distinct().collect(
+				Collectors.partitioningBy(Match::isDay, Collectors.mapping(Match::getMatchNumber, Collectors.toList())))
+				.forEach((k, v) -> {
+					System.out.println((k ? "Day Match Number" : "Night Match Number") + " = " + v);
+				});
 
 	}
 
