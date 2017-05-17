@@ -27,12 +27,14 @@ public class QuizRunner {
 	}
 
 	public static void main(String[] args) {
-		System.out.println("Quiz 1 ---->>>");
-		quiz1();
-		System.out.println("\n\n Quiz 2 ---->>>");
-		quiz2();
-		System.out.println("\n\n Quiz 3 ---->>>");
-		quiz3();
+		//System.out.println("Quiz 1 ---->>>");
+		//quiz1();
+		//System.out.println("\n\n Quiz 2 ---->>>");
+		//quiz2();
+		//	System.out.println("\n\n Quiz 3 ---->>>");
+		//quiz3();
+		System.out.println("\n\n Quiz 4 ---->>>");
+		quiz4();
 	}
 	public static void quiz1(){
 		List<Team> teams = QuizDataProvider.getTeams();
@@ -122,11 +124,11 @@ public class QuizRunner {
 		.collect(Collectors.toList())
 		.forEach(System.out::println);
 
-		System.out.println("\n------------Duration of Tournament------------");
+		System.out.println("\n------------Duration of Tournament?------------");
 		System.out.println(" "+ teams
 				.stream()
 		.flatMap(teams1 -> teams1.getMatches().stream()).map(Match :: getMatchDate)
-		.distinct().count());
+		.distinct().count()+" days");
 
 		System.out.println("\n------------Details of all the Matches------------");
 		teams
@@ -147,4 +149,45 @@ public class QuizRunner {
 				.max()
 				.getAsInt());
 	}
+
+	public static void quiz4(){
+		List<Team> teams = QuizDataProvider.getTeams();
+
+		System.out.println("-------------Venue = Dates-------------");
+		teams
+		.stream()
+		.flatMap(teams1 -> teams1.getMatches().stream()).distinct()
+		.collect(Collectors.groupingBy(Match :: getVenue, Collectors.mapping(Match :: getMatchDate, Collectors.toList())))
+		.forEach((k,v) -> {
+			System.out.println(" "+k+ "= "+v);
+		});
+
+		System.out.println("\n-------------Max Number Scored at Each Venue-------------");
+		teams
+		.stream()
+		.flatMap(teams1 -> teams1.getMatches().stream()).distinct()
+		.collect(Collectors.toMap(Match :: getVenue, Match :: getRunsScored, Integer :: max))
+		.forEach((k,v) -> {
+			System.out.println(""+k+"= "+v);
+		});
+
+		System.out.println("\n-------------Total Runs Scored at Venue-------------");
+		teams
+		.stream()
+		.flatMap(teams1 -> teams1.getMatches().stream()).distinct()
+		.collect(Collectors.toMap(Match :: getVenue, Match :: getTotalRunsScored,Integer :: sum))
+		.forEach((k,v) -> {
+			System.out.println(""+k+" = "+v);
+		});
+		
+		System.out.println("\n-------------Day\\Night Match Number-------------");
+		teams
+		.stream()
+		.flatMap(teams1 -> teams1.getMatches().stream()).distinct()
+		.collect(Collectors.partitioningBy(Match :: isDay,Collectors.mapping(Match :: getMatchNumber, Collectors.toList())))
+		.forEach((k,v) -> {
+			System.out.println((k ? "Day Match Number": "Night Match Number") + " = "+v);
+		});
+	}
 }
+
